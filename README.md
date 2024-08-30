@@ -1,2 +1,33 @@
 # rally-the-troops
-'''rally-the-troops-backend/ ├── src/ │ ├── config/ │ │ └── db.ts │ ├── controllers/ │ │ └── authController.ts │ ├── middleware/ │ │ └── auth.ts │ ├── models/ │ │ └── User.ts │ ├── routes/ │ │ └── authRoutes.ts │ ├── utils/ │ │ └── errorHandler.ts │ ├── index.ts │ ├── app.ts ├── dist/ # Compiled JavaScript output directory ├── .env # Environment variables ├── .gitignore # Git ignore file ├── package.json # Node.js dependencies and scripts ├── tsconfig.json # TypeScript configuration └── README.md # Project documentation'''
+'''
+├── README.md
+├── backend
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── src
+│   │   ├── app.js
+│   │   ├── app.ts
+│   │   ├── config
+│   │   │   ├── db.js
+│   │   │   └── db.ts
+│   │   ├── controllers
+│   │   │   ├── authController.js
+│   │   │   └── authController.ts
+│   │   ├── index.js
+│   │   ├── index.ts
+│   │   ├── middleware
+│   │   │   ├── auth.js
+│   │   │   └── auth.ts
+│   │   ├── models
+│   │   │   ├── User.js
+│   │   │   └── User.ts
+│   │   ├── routes
+│   │   │   ├── authRoutes.js
+│   │   │   └── authRoutes.ts
+│   │   └── utils
+│   │       ├── errorHandler.js
+│   │       └── errorHandler.ts
+│   └── tsconfig.json
+├── package-lock.json
+└── package.json
+'''
