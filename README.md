@@ -1,5 +1,5 @@
 # rally-the-troops
-'''
+```
 ├── README.md
 ├── backend
 │   ├── package-lock.json
@@ -30,4 +30,4 @@
 │   └── tsconfig.json
 ├── package-lock.json
 └── package.json
-'''
+```
