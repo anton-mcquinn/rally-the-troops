@@ -13,10 +13,6 @@ app.use(cors());
 app.get('/', (req, res) => {
 	res.send('Rally the Troops API is running...');
 });
-app.post('/register', (req, res) => {
-	res.send('Attempting to create entry...');
-	registerUser(req.body, res);
-});
-
+app.post('/register', registerUser);
 export default app;
 
