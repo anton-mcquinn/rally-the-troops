@@ -1,0 +1,30 @@
+# Node.js dependencies
+node_modules/
+
+# TypeScript build output
+dist/
+
+# Log files
+*.log
+
+# Environment variables
+.env
+
+# Production files
+*.env.production
+
+# Compiled JavaScript files
+backend/src/**/*.js
+
+# VS Code settings folder
+.vscode/
+
+# MacOS files
+.DS_Store
+
+# Idea IDE files
+.idea/
+
+# Git-specific files
+*.swp
+
