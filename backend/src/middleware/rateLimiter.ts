@@ -1,4 +1,4 @@
-import rateLimit from "express-rate-limit";
+import { rateLimit } from "express-rate-limit";
 
 // Apply rate limiting to login route
 const loginLimiter = rateLimit({
@@ -8,3 +8,5 @@ const loginLimiter = rateLimit({
     msg: "Too many login attempts from this IP, please try again after 15 minutes",
   },
 });
+
+export { loginLimiter };
