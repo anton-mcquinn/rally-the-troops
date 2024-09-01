@@ -3,7 +3,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import { registerUser, loginUser } from "./controllers/authController";
 import { auth } from "./middleware/auth";
-import { loginLimiter } from "./middleware/rateLimiter";
+import loginLimiter from "./middleware/rateLimiter";
 
 const app = express();
 
