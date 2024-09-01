@@ -3,6 +3,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import { registerUser, loginUser } from "./controllers/authController";
 import { auth } from "./middleware/auth";
+import { loginLimiter } from "./middleware/rateLimiter";
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.get("/", (req, res) => {
   res.send("Rally the Troops API is running...");
 });
 app.post("/register", registerUser);
-app.get("/login", loginUser);
+app.get("/login", loginLimiter, loginUser);
 app.get("/protected-route", auth, (req, res) => {
   res.json({ msg: "This is a protected route", userId: req.user });
 });
