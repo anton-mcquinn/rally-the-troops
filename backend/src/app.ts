@@ -17,6 +17,6 @@ app.get("/", (req, res) => {
 app.post("/register", registerUser);
 app.get("/login", loginUser);
 app.get("/protected-route", auth, (req, res) => {
-  res.json({ msg: "This is a protected route", userId: req.user.userId });
+  res.json({ msg: "This is a protected route", userId: req.user });
 });
 export default app;
