@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User";
 
 interface JwtPayloadWithId extends jwt.JwtPayload {
-  _id: string;
+  userId: string;
 }
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
@@ -18,7 +18,8 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
       token,
       process.env.JWT_SECRET as string,
     ) as JwtPayloadWithId;
-    const user = await User.findById(decoded._id);
+
+    const user = await User.findById(decoded.userId); // Use userId instead of _id
 
     if (!user) {
       return res
