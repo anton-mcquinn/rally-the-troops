@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IEvent extends Document {
   id: number;
@@ -7,8 +7,8 @@ export interface IEvent extends Document {
   date: Date;
   location: string;
   activity: string;
-  createdBy: mongoose.Types.ObjectId;
-  attendees: mongoose.Types.ObjectId[];
+  createdBy: Types.ObjectId;
+  attendees: Types.ObjectId[];
 }
 
 const EventSchema: Schema<IEvent> = new Schema({
@@ -18,8 +18,8 @@ const EventSchema: Schema<IEvent> = new Schema({
   date: { type: Date, required: true },
   location: { type: String },
   activity: { type: String, required: true },
-  createdBy: { type: mongoose.Types.ObjectId, ref: "User", required: true },
-  attendees: [{ type: mongoose.Types.ObjectId, ref: "User" }],
+  createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  attendees: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 const Event = mongoose.model<IEvent>("Event", EventSchema);
