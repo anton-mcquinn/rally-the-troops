@@ -6,7 +6,7 @@ export interface IEvent extends Document {
   date: Date;
   location: string;
   activity: string;
-  createdBy: Types.ObjectId;
+  createdBy: string;
   attendees: Types.ObjectId[];
 }
 
@@ -16,7 +16,7 @@ const EventSchema: Schema<IEvent> = new Schema({
   date: { type: Date, required: true },
   location: { type: String },
   activity: { type: String, required: true },
-  createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  createdBy: { type: String, required: true },
   attendees: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
