@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import authRoutes from "./routes/authRoutes";
 import { registerUser, loginUser } from "./controllers/authController";
+import { createEvent } from "./controllers/eventController";
 import { auth } from "./middleware/auth";
 import { loginLimiter } from "./middleware/rateLimiter";
 
@@ -20,4 +20,6 @@ app.get("/login", loginLimiter, loginUser);
 app.get("/protected-route", auth, (req, res) => {
   res.json({ msg: "This is a protected route", userId: req.user });
 });
+
+app.post("/event", auth, createEvent);
 export default app;
