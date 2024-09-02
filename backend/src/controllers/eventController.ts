@@ -9,6 +9,8 @@ export const createEvent = async (req: Request, res: Response) => {
     return res.status(401).json({ msg: "Unauthorized" });
   }
 
+  console.log("Body: ", req.body);
+  console.log("User: ", req.user);
   try {
     const newEvent = new Event({
       name,
