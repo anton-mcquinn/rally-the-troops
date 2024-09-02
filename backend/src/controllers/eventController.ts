@@ -38,7 +38,38 @@ export const createEvent = async (req: Request, res: Response) => {
 
 export const getEvents = async (req: Request, res: Response) => {
   try {
-    const events = await Event.find();
+    // Build a filter object based on query parameters
+    const filter: any = {};
+
+    if (req.query.title) {
+      filter.title = { $regex: req.query.title, $options: "i" }; // Case-insensitive regex search
+    }
+
+    if (req.query.location) {
+      filter.location = { $regex: req.query.location, $options: "i" }; // Case-insensitive regex search
+    }
+
+    if (req.query.createdBy) {
+      filter.createdBy = req.query.createdBy; // Exact match on createdBy
+    }
+
+    if (req.query.activity) {
+      filter.activity = { $regex: req.query.activity, $options: "i" }; // Case-insensitive regex search
+    }
+
+    // Date range filtering
+    if (req.query.startDate || req.query.endDate) {
+      filter.date = {};
+      if (req.query.startDate) {
+        filter.date.$gte = new Date(req.query.startDate as string); // Greater than or equal to startDate
+      }
+      if (req.query.endDate) {
+        filter.date.$lte = new Date(req.query.endDate as string); // Less than or equal to endDate
+      }
+    }
+
+    // Fetch events based on the filter
+    const events = await Event.find(filter);
     res.status(200).json(events);
   } catch (err) {
     if (err instanceof Error) {
@@ -50,4 +81,3 @@ export const getEvents = async (req: Request, res: Response) => {
     }
   }
 };
-// More event controllers (getEvent, updateEvent, deleteEvent) would go here...

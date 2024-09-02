@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { registerUser, loginUser } from "./controllers/authController";
-import { createEvent } from "./controllers/eventController";
+import { createEvent, getEvents } from "./controllers/eventController";
 import { auth } from "./middleware/auth";
 import { loginLimiter } from "./middleware/rateLimiter";
 
@@ -22,4 +22,5 @@ app.get("/protected-route", auth, (req, res) => {
 });
 
 app.post("/event", auth, createEvent);
+app.get("/event", auth, getEvents);
 export default app;
