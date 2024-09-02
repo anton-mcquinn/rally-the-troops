@@ -47,5 +47,5 @@ export const getEvents = async (req: Request, res: Response) => {
       res.status(500).send("Server error");
     }
   }
-
+};
 // More event controllers (getEvent, updateEvent, deleteEvent) would go here...
