@@ -21,5 +21,7 @@ app.get("/protected-route", auth, (req, res) => {
   res.json({ msg: "This is a protected route", userId: req.user });
 });
 
-app.use("/event", auth, createEvent);
+app.post("/event", auth, (req, res) => {
+  createEvent(req, res);
+});
 export default app;
