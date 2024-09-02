@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import Event from "../models/Event";
 
 export const createEvent = async (req: Request, res: Response) => {
-  const { name, description, date, location, activity, createdBy } = req.body;
+  const { title, description, date, location, activity, createdBy } = req.body;
 
   if (!req.user) {
     return res.status(401).json({ msg: "Unauthorized" });
@@ -13,7 +13,7 @@ export const createEvent = async (req: Request, res: Response) => {
   console.log("User: ", req.user);
   try {
     const newEvent = new Event({
-      name,
+      title,
       description,
       date,
       location,
