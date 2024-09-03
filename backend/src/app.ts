@@ -3,6 +3,7 @@ import cors from "cors";
 import { registerUser, loginUser } from "./controllers/authController";
 import { createEvent, getEvents } from "./controllers/eventController";
 import { auth } from "./middleware/auth";
+import { rsvpEvent } from "./controllers/rsvpController";
 import { loginLimiter } from "./middleware/rateLimiter";
 
 const app = express();
@@ -23,4 +24,6 @@ app.get("/protected-route", auth, (req, res) => {
 
 app.post("/event", auth, createEvent);
 app.get("/event", auth, getEvents);
+
+app.post("/rsvp", auth, rsvpEvent);
 export default app;

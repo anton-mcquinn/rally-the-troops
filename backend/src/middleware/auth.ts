@@ -4,6 +4,7 @@ import User from "../models/User";
 
 interface JwtPayloadWithId extends jwt.JwtPayload {
   userId: string;
+  email: string;
 }
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
@@ -26,8 +27,8 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
         .status(401)
         .json({ msg: "User not found, authorization denied" });
     }
+    req.user = { _id: user._id, email: user.email };
 
-    req.user = user;
     next();
   } catch (err) {
     console.error("Token verification failed:", err);

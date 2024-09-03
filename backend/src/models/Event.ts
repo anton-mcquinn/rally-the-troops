@@ -7,7 +7,9 @@ export interface IEvent extends Document {
   location: string;
   activity: string;
   createdBy: string;
-  attendees: Types.ObjectId[];
+  invitees: String[];
+  attendees: String[];
+  declined: String[];
 }
 
 const EventSchema: Schema<IEvent> = new Schema({
@@ -17,7 +19,9 @@ const EventSchema: Schema<IEvent> = new Schema({
   location: { type: String },
   activity: { type: String, required: true },
   createdBy: { type: String, required: true },
-  attendees: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  invitees: [{ type: String }],
+  attendees: [{ type: String }],
+  declined: [{ type: String }],
 });
 
 const Event = mongoose.model<IEvent>("Event", EventSchema);
