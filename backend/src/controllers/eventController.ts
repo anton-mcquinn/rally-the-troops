@@ -19,7 +19,9 @@ export const createEvent = async (req: Request, res: Response) => {
       location,
       activity,
       createdBy,
+      invitees: [],
       attendees: [],
+      declined: [],
     });
 
     const savedEvent = await newEvent.save();
