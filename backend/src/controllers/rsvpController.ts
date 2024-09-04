@@ -2,20 +2,16 @@ import { Request, Response } from "express";
 import Event from "../models/Event";
 import jwt from "jsonwebtoken";
 
-interface JwtPayloadWithId extends jwt.JwtPayload {
-  email: string;
-}
-
 export const rsvpEvent = async (req: Request, res: Response) => {
   const { eventId } = req.params;
   const { action } = req.body;
+  console.log("user: ", req.user);
 
   if (!req.user) {
     return res.status(401).json({ msg: "Unauthorized" });
   }
-  const { user } = req.user as JwtPayloadWithId;
+  const { user } = req.user as jwt.JwtPayload;
   const email = user.email;
-  console.log("user: ", user);
 
   try {
     const event = await Event.findById(eventId);
