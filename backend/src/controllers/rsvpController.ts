@@ -10,7 +10,7 @@ export const rsvpEvent = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ msg: "Unauthorized" });
   }
-  const { user } = req.user as jwt.JwtPayload;
+  const user = req.user as jwt.JwtPayload;
   const email = user.email;
 
   try {
