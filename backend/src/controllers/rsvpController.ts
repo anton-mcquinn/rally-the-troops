@@ -15,6 +15,7 @@ export const rsvpEvent = async (req: Request, res: Response) => {
   }
   const { user } = req.user as JwtPayloadWithId;
   const email = user.email;
+  console.log("user: ", user);
 
   try {
     const event = await Event.findById(eventId);
