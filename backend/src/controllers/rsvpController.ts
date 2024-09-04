@@ -3,7 +3,7 @@ import Event from "../models/Event";
 import jwt from "jsonwebtoken";
 
 interface JwtPayloadWithId extends jwt.JwtPayload {
-  userId: string;
+  email: string;
 }
 
 export const rsvpEvent = async (req: Request, res: Response) => {
