@@ -12,7 +12,7 @@ export const rsvpEvent = async (req: Request, res: Response) => {
   }
   const user = req.user as jwt.JwtPayload;
   const email = user.email;
-
+  console.log("Event ID: ", eventId);
   try {
     const event = await Event.findById(eventId);
 

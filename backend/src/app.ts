@@ -12,10 +12,10 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-//app.use('/api/auth', authRoutes);
 app.get("/", (req, res) => {
   res.send("Rally the Troops API is running...");
 });
+
 app.post("/register", registerUser);
 app.get("/login", loginLimiter, loginUser);
 app.get("/protected-route", auth, (req, res) => {
@@ -25,5 +25,7 @@ app.get("/protected-route", auth, (req, res) => {
 app.post("/event", auth, createEvent);
 app.get("/event", auth, getEvents);
 
-app.post("/rsvp", auth, rsvpEvent);
+// RSVP route with eventId as a route parameter
+app.post("/event/:eventId/rsvp", auth, rsvpEvent);
+
 export default app;
