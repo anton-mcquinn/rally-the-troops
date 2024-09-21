@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/register", registerUser);
-app.get("/login", loginLimiter, loginUser);
+app.post("/login", loginUser); // loginLimiter removed for testing. Add it back in production
 app.get("/protected-route", auth, (req, res) => {
   res.json({ msg: "This is a protected route", userId: req.user });
 });
