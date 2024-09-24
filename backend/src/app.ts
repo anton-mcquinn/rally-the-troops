@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { registerUser, loginUser } from "./controllers/authController";
+import { refreshToken } from "./controllers/refreshController";
 import { createEvent, getEvents } from "./controllers/eventController";
 import { auth } from "./middleware/auth";
 import { rsvpEvent } from "./controllers/rsvpController";
@@ -16,11 +17,10 @@ app.get("/", (req, res) => {
   res.send("Rally the Troops API is running...");
 });
 
+// Authentication routes
 app.post("/register", registerUser);
 app.post("/login", loginUser); // loginLimiter removed for testing. Add it back in production
-app.get("/protected-route", auth, (req, res) => {
-  res.json({ msg: "This is a protected route", userId: req.user });
-});
+app.post("/refresh-token", refreshToken);
 
 app.post("/event", auth, createEvent);
 app.get("/event", auth, getEvents);

@@ -1,38 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   Button,
-  FlatList,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
-
-const eventsData = [
-  { id: "1", title: "Event One", description: "This is the first event" },
-  { id: "2", title: "Event Two", description: "This is the second event" },
-];
+import { getEvents } from "../../services/eventApi";
+import { Event } from "../../types";
 
 const EventsScreen = () => {
   const router = useRouter();
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.item}
-      onPress={() => router.push(`/events/${item.id}`)} // Navigate to event details screen
-    >
-      <Text style={styles.title}>{item.title}</Text>
-      <Text>{item.description}</Text>
-    </TouchableOpacity>
-  );
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const eventsData = await getEvents();
+        setEvents(eventsData);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={eventsData}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+      <FlashList
+        data={events}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
+          <View>
+            <Text>{item.title}</Text>
+            <Text>{item.date}</Text>
+          </View>
+        )}
       />
       <Button
         title="Create Event"

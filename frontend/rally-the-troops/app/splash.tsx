@@ -21,7 +21,7 @@ const LoginScreen = () => {
       const token = await SecureStore.getItemAsync("token");
       if (token) {
         // If token exists, navigate to tabs
-        router.push("/tabs" as Href);
+        router.push("(tabs)" as Href);
       } else {
         // If not authenticated, navigate to login screen
         router.push("/login");
