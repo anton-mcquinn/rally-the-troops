@@ -21,14 +21,17 @@ const LoginScreen = () => {
         email,
         password,
       });
-      if (response.data.token) {
-        // Store the token securely using SecureStore
-        await SecureStore.setItemAsync("token", response.data.token);
-        router.push("/tabs" as Href); // Navigate to home screen on successful login
-      }
+      const { accessToken, refreshToken } = response.data;
+      // Store the token securely using SecureStore
+      await SecureStore.setItemAsync("token", accessToken);
+      await SecureStore.setItemAsync("refresh_token", refreshToken);
+      console.log("tokens must have been stored");
+      router.push("/(tabs)" as Href); // Navigate to home screen on successful login
     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("login error: ", error.response?.data);
+      }
       console.error("Login error:", error);
-      console.error("Login error response:", error.response.data);
     }
   };
 

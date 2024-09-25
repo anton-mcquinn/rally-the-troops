@@ -7,8 +7,6 @@ export const getEvents = async (filters: any = {}) => {
     const response = await axiosInstance.get("/event");
     return response.data;
   } catch (error) {
-    const err = error as Error;
-    console.error("Error Message: ", err.response.data);
     throw new Error("Failed to fetch events");
   }
 };

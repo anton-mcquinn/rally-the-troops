@@ -41,11 +41,12 @@ const EventsScreen = () => {
         data={events}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.title}</Text>
+          <View style={styles.item}>
+            <Text style={styles.title}>{item.title}</Text>
             <Text>{item.date}</Text>
           </View>
         )}
+        estimatedItemSize={43}
       />
       <Button
         title="Create Event"

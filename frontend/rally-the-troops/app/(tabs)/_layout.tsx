@@ -1,10 +1,37 @@
 import { Tabs } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Button, Alert } from "react-native";
+import { useRouter } from "expo-router";
+import { logout } from "../../services/authService";
 
 export default function TabLayout() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    Alert.alert("Logout", "Are you sure you want to logout?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        onPress: async () => {
+          try {
+            await logout(router); // Properly await and handle logout
+            router.push("/login"); // Navigate to the login screen
+          } catch (error) {
+            console.error("Logout failed:", error);
+          }
+        },
+      },
+    ]);
+  };
+
   return (
-    <Tabs>
-      {/* Explicitly include the tabs you want */}
+    <Tabs
+      screenOptions={{
+        headerRight: () => (
+          <Button onPress={handleLogout} title="Logout" color="#007AFF" />
+        ),
+      }}
+    >
       <Tabs.Screen
         name="home"
         options={{
