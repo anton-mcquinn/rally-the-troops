@@ -65,7 +65,7 @@ export const loginUser = async (req: Request, res: Response) => {
       process.env.REFRESH_TOKEN_SECRET as string, // Use your refresh token secret from .env
       { expiresIn: "7d" }, // Token expiration time
     );
-    const userId = user.id;
+    const userId = user._id;
 
     // Return the token to the client
     return res.status(200).json({ accessToken, refreshToken, userId });
