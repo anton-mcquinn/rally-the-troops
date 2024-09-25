@@ -21,10 +21,11 @@ const LoginScreen = () => {
         email,
         password,
       });
-      const { accessToken, refreshToken } = response.data;
+      const { accessToken, refreshToken, userId } = response.data;
       // Store the token securely using SecureStore
       await SecureStore.setItemAsync("token", accessToken);
       await SecureStore.setItemAsync("refresh_token", refreshToken);
+      await SecureStore.setItemAsync("user_id", userId);
       console.log("tokens must have been stored");
       router.push("/(tabs)" as Href); // Navigate to home screen on successful login
     } catch (error) {

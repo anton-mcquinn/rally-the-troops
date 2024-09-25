@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { logout } from "./authService"; // Assuming this handles logout and redirection
+import { useRouter } from "expo-router";
 
 const axiosInstance = axios.create({
   baseURL: "https://rtt.rideburro.com",
@@ -62,8 +63,10 @@ axiosInstance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return axiosInstance(originalRequest); // Retry the request with the new token
       } catch (refreshError) {
+        const router = useRouter();
         // If refreshing the token fails, log the user out
         logout(); // Call the logout function from authService
+        router.push("/login"); // Redirect the user to the login page
         return Promise.reject(refreshError);
       }
     }

@@ -1,4 +1,3 @@
-// src/controllers/authController.ts
 import { Request, Response } from "express";
 import User from "../models/User";
 import bcrypt from "bcryptjs";
@@ -68,7 +67,7 @@ export const loginUser = async (req: Request, res: Response) => {
     );
 
     // Return the token to the client
-    return res.status(200).json({ accessToken, refreshToken });
+    return res.status(200).json({ accessToken, refreshToken, userId: user.id });
   } catch (err) {
     if (err instanceof Error) {
       console.error(err.message);
