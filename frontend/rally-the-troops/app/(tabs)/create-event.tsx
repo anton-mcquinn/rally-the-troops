@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -23,6 +23,15 @@ const CreateEventScreen = () => {
   const [activity, setActivity] = useState("");
   const [invitees, setInvitees] = useState(""); // This could be a comma-separated string of emails or IDs
   const [loading, setLoading] = useState(false);
+  const [createdBy, setCreatedBy] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const userId = await SecureStore.getItemAsync("userId");
+      setCreatedBy(userId);
+    };
+    fetchUserId();
+  }, []);
 
   const handleCreateEvent = async () => {
     if (!title || !description || !date || !location || !activity) {
@@ -39,6 +48,7 @@ const CreateEventScreen = () => {
       date,
       location,
       activity,
+      createdBy,
       invitees: inviteesArray,
     };
 
