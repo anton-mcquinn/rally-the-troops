@@ -7,8 +7,7 @@ export const createEvent = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ msg: "Unauthorized" });
   }
-  const createdBy = req.user._id;
-
+  const createdBy = req._id;
   console.log("Body: ", req.body);
   console.log("User: ", req.user);
   try {
