@@ -17,7 +17,7 @@ const EventsScreen = () => {
   const router = useRouter();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({ createdBy: "" });
+  const [filters, setFilters] = useState({});
   const [me, setMe] = useState<string | null>(null);
 
   // Fetch user ID from SecureStore on component mount
@@ -35,8 +35,8 @@ const EventsScreen = () => {
     const fetchEvents = async () => {
       try {
         setLoading(true); // Ensure loading indicator shows when fetching events
-        console.log("Fetching events with filters:", filters);
         const eventsData = await getEvents(filters);
+        console.log("Filter: ", filters);
         setEvents(eventsData);
       } catch (error) {
         console.error(error);
@@ -57,6 +57,13 @@ const EventsScreen = () => {
       });
     }
   };
+  const onPressAllFilter = () => {
+    if (me) {
+      setFilters({
+        $or: [{ createdBy: me }, { attendees: me }],
+      });
+    }
+  };
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -64,6 +71,9 @@ const EventsScreen = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={onPressAllFilter}>
+        <Text>All Events</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={onPressMeFilter}>
         <Text>My Events</Text>
       </TouchableOpacity>

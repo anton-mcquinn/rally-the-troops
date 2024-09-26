@@ -41,7 +41,7 @@ export const createEvent = async (req: Request, res: Response) => {
 export const getEvents = async (req: Request, res: Response) => {
   try {
     // Build a filter object based on query parameters
-    const filter: any = {};
+    const filter: any = req.query;
 
     if (req.query.title) {
       filter.title = { $regex: req.query.title, $options: "i" }; // Case-insensitive regex search

@@ -4,7 +4,7 @@ import { Event } from "../types"; // Define your Event type here for TypeScript 
 // Get events with optional query parameters
 export const getEvents = async (filters: any = {}) => {
   try {
-    const response = await axiosInstance.get("/event");
+    const response = await axiosInstance.get("/event", { params: filters });
     return response.data;
   } catch (error) {
     throw new Error("Failed to fetch events");
