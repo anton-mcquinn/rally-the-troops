@@ -11,6 +11,7 @@ import {
 import { useRouter } from "expo-router";
 import { createEvent } from "../../services/eventApi";
 import * as SecureStore from "expo-secure-store";
+import { Event } from "../../types";
 
 const CreateEventScreen = () => {
   const router = useRouter();
@@ -27,12 +28,16 @@ const CreateEventScreen = () => {
 
   useEffect(() => {
     const fetchUserId = async () => {
-      const userId = await SecureStore.getItemAsync("userId");
-      setCreatedBy(userId);
+      const userId = await SecureStore.getItemAsync("user_id");
+      if (!userId) {
+        console.error("Error: No user ID found in SecureStore");
+        Alert.alert("Error", "User is not authenticated");
+      } else {
+        setCreatedBy(userId); // Set user ID to createdBy
+      }
     };
     fetchUserId();
   }, []);
-
   const handleCreateEvent = async () => {
     if (!title || !description || !date || !location || !activity) {
       Alert.alert("Please fill in all fields");
@@ -42,7 +47,7 @@ const CreateEventScreen = () => {
     // Prepare invitees (split comma-separated string)
     const inviteesArray = invitees.split(",").map((email) => email.trim());
 
-    const newEvent = {
+    const newEvent: Event = {
       title,
       description,
       date,
@@ -55,6 +60,7 @@ const CreateEventScreen = () => {
     setLoading(true);
     try {
       // Make the API call to create an event
+      console.log("Event: ", newEvent);
       const response = await createEvent(newEvent);
       console.log("Event Created: ", response);
       Alert.alert("Event created successfully");

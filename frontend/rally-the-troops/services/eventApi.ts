@@ -14,7 +14,7 @@ export const getEvents = async (filters: any = {}) => {
 // Create a new event
 export const createEvent = async (eventData: Event) => {
   try {
-    const response = await axiosInstance.post("/events", eventData);
+    const response = await axiosInstance.post("/event", eventData);
     return response.data;
   } catch (error) {
     throw new Error("Failed to create event");
