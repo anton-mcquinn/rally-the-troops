@@ -71,6 +71,9 @@ const EventsScreen = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => setFilters({})}>
+        <Text>DEBUG: All Events</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={onPressAllFilter}>
         <Text>All Events</Text>
       </TouchableOpacity>
