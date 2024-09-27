@@ -6,6 +6,7 @@ import { createEvent, getEvents } from "./controllers/eventController";
 import { auth } from "./middleware/auth";
 import { rsvpEvent } from "./controllers/rsvpController";
 import { loginLimiter } from "./middleware/rateLimiter";
+import { followUser } from "./controllers/squadController";
 
 const app = express();
 
@@ -22,10 +23,14 @@ app.post("/register", registerUser);
 app.post("/login", loginUser); // loginLimiter removed for testing. Add it back in production
 app.post("/refresh-token", refreshToken);
 
+// Event Routes
 app.post("/event", auth, createEvent);
 app.get("/event", auth, getEvents);
 
 // RSVP route with eventId as a route parameter
 app.post("/event/:eventId/rsvp", auth, rsvpEvent);
+
+//Squad Routes
+app.post("/squad", auth, followUser);
 
 export default app;
