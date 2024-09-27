@@ -6,7 +6,7 @@ import { createEvent, getEvents } from "./controllers/eventController";
 import { auth } from "./middleware/auth";
 import { rsvpEvent } from "./controllers/rsvpController";
 import { loginLimiter } from "./middleware/rateLimiter";
-import { followUser } from "./controllers/squadController";
+import { followUser, getSquad } from "./controllers/squadController";
 
 const app = express();
 
@@ -32,5 +32,6 @@ app.post("/event/:eventId/rsvp", auth, rsvpEvent);
 
 //Squad Routes
 app.post("/squad", auth, followUser);
+app.get("/squad", auth, getSquad);
 
 export default app;
