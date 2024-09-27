@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 
 export const followUser = async (req: Request, res: Response) => {
-  const { friendId } = req.body;
-  const userId = req.user._id;
+  const { friendId, userId } = req.body;
 
   try {
     // Check if both the user and friend exist
@@ -12,6 +11,11 @@ export const followUser = async (req: Request, res: Response) => {
 
     if (!user || !friend) {
       return res.status(404).json({ msg: "User not found" });
+    }
+
+    //Don't alow user to follow themselves
+    if (userId === friendId) {
+      return res.status(400).json({ msg: "You can't follow yourself" });
     }
 
     // Check if the friend is already in the squad
@@ -33,17 +37,22 @@ export const followUser = async (req: Request, res: Response) => {
 };
 
 export const getSquad = async (req: Request, res: Response) => {
-  const userId = req.user._id;
+  const userId = req.body.userId;
+
   try {
-    const user = await User.findById(userId).populate("squad");
+    // Retrieve the user's squad and populate basic info for each friend
+    const user = await User.findById(userId).populate(
+      "squad",
+      "username email",
+    );
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
     res.status(200).json({ squad: user.squad });
   } catch (err) {
-    if (err instanceof Error) {
-      console.error(err.message);
-      res.status(500).json({ msg: "Server error" });
-    } else {
-      console.error("An unexpected error occurred");
-      res.status(500).send({ msg: "Server error" });
-    }
+    console.error("Server error:", err);
+    res.status(500).json({ msg: "Server error" });
   }
 };
