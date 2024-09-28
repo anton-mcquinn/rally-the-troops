@@ -38,13 +38,11 @@ export const followUser = async (req: Request, res: Response) => {
 
 export const getSquad = async (req: Request, res: Response) => {
   const userId = req.body.userId;
+  console.log("UserID: ", userId);
 
   try {
     // Retrieve the user's squad and populate basic info for each friend
-    const user = await User.findById(userId).populate(
-      "squad",
-      "username email",
-    );
+    const user = await User.findById(userId).populate("squad");
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
