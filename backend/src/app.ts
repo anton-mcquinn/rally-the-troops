@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { registerUser, loginUser } from "./controllers/authController";
 import { refreshToken } from "./controllers/refreshController";
-import { createEvent, getEvents } from "./controllers/eventController";
+import { createEvent, getEvents, getEventById } from "./controllers/eventController";
 import { auth } from "./middleware/auth";
 import { rsvpEvent } from "./controllers/rsvpController";
 import { loginLimiter } from "./middleware/rateLimiter";
@@ -26,6 +26,7 @@ app.post("/refresh-token", refreshToken);
 // Event Routes
 app.post("/event", auth, createEvent);
 app.get("/event", auth, getEvents);
+app.get("/event/:id", getEventById);
 
 // RSVP route with eventId as a route parameter
 app.post("/event/:eventId/rsvp", auth, rsvpEvent);
