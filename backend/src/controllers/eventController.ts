@@ -82,3 +82,19 @@ export const getEvents = async (req: Request, res: Response) => {
     }
   }
 };
+
+// Get a single event by its ID
+export const getEventById = async (req: Request, res: Response) => {
+  try {
+    const eventId = req.params.id;
+    const event = await EventModel.findById(eventId);
+    
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    
+    res.status(200).json(event);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch event", error });
+  }
+};

@@ -1,46 +1,48 @@
-// app/events/[id].tsx
-import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-import { useRouter, useSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router"; // Use useLocalSearchParams
+import { getEventById } from "../../services/eventApi"; // Assuming you have this API call
 
-const eventDetails = {
-  "1": {
-    id: "1",
-    title: "Event One",
-    description: "Details for the first event",
-  },
-  "2": {
-    id: "2",
-    title: "Event Two",
-    description: "Details for the second event",
-  },
-};
-
-const EventDetailsScreen = () => {
+const EventDetails = () => {
+  const { id } = useLocalSearchParams(); // Extracting the dynamic "id" from the route
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { id } = useSearchParams(); // Get the event ID from the route
 
-  const event = eventDetails[id];
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const eventData = await getEventById(id); // Assuming you have an API to fetch event by ID
+        setEvent(eventData);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchEvent();
+    }
+  }, [id]);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  if (!event) {
+    return <Text>Event not found</Text>;
+  }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{event?.title}</Text>
-      <Text>{event?.description}</Text>
-      <Button title="Back to Events" onPress={() => router.back()} />
+    <View>
+      <Text>{event.title}</Text>
+      <Text>{event.description}</Text>
+      <Text>{event.date}</Text>
+      {/* More event details */}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-});
+export default EventDetails;
 
-export default EventDetailsScreen;

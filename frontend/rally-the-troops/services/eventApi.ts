@@ -10,7 +10,15 @@ export const getEvents = async (filters: any = {}) => {
     throw new Error("Failed to fetch events");
   }
 };
-
+// Get a single event by its ID
+export const getEventById = async (eventId: string) => {
+  try {
+    const response = await axiosInstance.get(`/event/${eventId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch event by ID");
+  }
+};
 // Create a new event
 export const createEvent = async (eventData: Event) => {
   try {
