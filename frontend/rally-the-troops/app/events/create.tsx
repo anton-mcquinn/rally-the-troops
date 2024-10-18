@@ -38,6 +38,11 @@ const CreateEvent = () => {
     };
     fetchUserId();
   }, []);
+
+  const handleCancel = async () => {
+    router.push("/(tabs)/events");
+  };
+
   const handleCreateEvent = async () => {
     if (!title || !description || !date || !location || !activity) {
       Alert.alert("Please fill in all fields");
@@ -72,6 +77,7 @@ const CreateEvent = () => {
       setLoading(false);
     }
   };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Event</Text>
@@ -112,12 +118,19 @@ const CreateEvent = () => {
         value={invitees}
         onChangeText={setInvitees}
       />
-
+    <View style={styles.buttonContainer}>
+        <View style={styles.buttomWrapper}>
       <Button
         title={loading ? "Creating..." : "Create Event"}
         onPress={handleCreateEvent}
         disabled={loading}
-      />
+      /></View> 
+      <Button
+        title={"Cancel"}
+        onPress={handleCancel}
+        disabled={loading}
+        />
+        </View>
     </View>
   );
 };
@@ -142,6 +155,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
   },
+  buttonContainer: {
+    marginTop: 20,
+  },
+  buttomWrapper: {
+    marginBottom: 10,
+  }
 });
 
 export default CreateEvent;

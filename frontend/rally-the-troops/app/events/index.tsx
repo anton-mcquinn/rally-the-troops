@@ -125,15 +125,6 @@ const EventsList = () => {
                 <Text style={styles.title}>{item.title}</Text>
                 <Text>{item.date}</Text>
               </View>
-                <MaterialIcons
-                  name={
-                    expandedEventId === item._id
-                      ? "keyboard-arrow-up"
-                      : "keyboard-arrow-down"
-                  }
-                  size={24}
-                  color="black"
-                />
             </View>
             {renderEventDetails(item)}
           </View>

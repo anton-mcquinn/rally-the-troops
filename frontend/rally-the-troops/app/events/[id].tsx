@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router"; // Use useLocalSearchParams
+import { useLocalSearchParams, useRouter, Stack } from "expo-router"; // Use useLocalSearchParams
 import { getEventById } from "../../services/eventApi"; // Assuming you have this API call
+import { Event } from "../../types"; // Your Event type
 
 const EventDetails = () => {
-  const { id } = useLocalSearchParams(); // Extracting the dynamic "id" from the route
-  const [event, setEvent] = useState(null);
+  const { id } = useLocalSearchParams(); 
+  const [event, setEvent] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-
+  
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const eventData = await getEventById(id); // Assuming you have an API to fetch event by ID
+        const eventData = await getEventById(id); 
         setEvent(eventData);
       } catch (error) {
         console.error(error);
@@ -36,10 +37,15 @@ const EventDetails = () => {
 
   return (
     <View>
-      <Text>{event.title}</Text>
-      <Text>{event.description}</Text>
-      <Text>{event.date}</Text>
-      {/* More event details */}
+      <Stack.Screen
+        options={{ title: event.title, }}
+        />
+      <Text>Description: {event.description}</Text>
+      <Text>Date: {event.date}</Text>
+      <Text>Location: {event.location}</Text>
+      <Text>Activity: {event.activity}</Text>
+      <Text>Event Creator: {event.createdBy}</Text>
+      <Tex
     </View>
   );
 };
