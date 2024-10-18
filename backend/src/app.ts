@@ -6,7 +6,7 @@ import { createEvent, getEvents, getEventById } from "./controllers/eventControl
 import { auth } from "./middleware/auth";
 import { rsvpEvent } from "./controllers/rsvpController";
 import { loginLimiter } from "./middleware/rateLimiter";
-import { followUser, getSquad } from "./controllers/squadController";
+import { sendFriendRequest, respondToFriendRequest, getPendingFriendRequests, getSquad } from "./controllers/squadController";
 
 const app = express();
 
@@ -32,7 +32,9 @@ app.get("/event/:id", getEventById);
 app.post("/event/:eventId/rsvp", auth, rsvpEvent);
 
 //Squad Routes
-app.post("/squad", auth, followUser);
+app.post("/squad/respond-request", auth, respondToFriendRequest);
+app.post("/squad/:id", auth, sendFriendRequest);
+app.get("/squad/pending-requests", auth, getPendingFriendRequests);
 app.get("/squad", auth, getSquad);
 
 export default app;

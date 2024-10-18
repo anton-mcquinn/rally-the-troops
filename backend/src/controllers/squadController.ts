@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import FriendRequest from "../models/FriendRequest";
+import User from "../models/User";
 
 export const sendFriendRequest = async (req: Request, res: Response) => {
   const { userId, friendId } = req.body;
@@ -99,3 +100,22 @@ export const getPendingFriendRequests = async (req: Request, res: Response) => {
   }
 };
 
+// Get user's squad
+export const getSquad = async (req: Request, res: Response) => {
+  try {
+    // Assuming userId is obtained from the authentication middleware (auth) rather than request body
+    const userId = req.user.id; 
+
+    // Find the user and populate the squad field with friend's details (e.g., name, email)
+    const user = await User.findById(userId).populate("squad", "name email");
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    res.status(200).json({ squad: user.squad });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
