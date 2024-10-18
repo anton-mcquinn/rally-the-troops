@@ -45,7 +45,6 @@ const EventDetails = () => {
       <Text>Location: {event.location}</Text>
       <Text>Activity: {event.activity}</Text>
       <Text>Event Creator: {event.createdBy}</Text>
-      <Tex
     </View>
   );
 };
