@@ -102,8 +102,8 @@ export const getPendingFriendRequests = async (req: Request, res: Response) => {
 // Get user's squad
 export const getSquad = async (req: Request, res: Response) => {
   try {
-    const email = req.body;
-    const user = await User.findById(email).populate("squad", "name email");
+    const userId = req.body;
+    const user = await User.findById(userId).populate("squad", "name email");
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });

@@ -1,98 +1,94 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Button,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { useRouter } from "expo-router";
-import { getSquad, getPendingRequests, respondToRequest } from "../../services/squadApi"; // API calls for squad
-import * as SecureStore from "expo-secure-store"; 
+import { View, Text, TextInput, Button, FlatList, StyleSheet } from "react-native";
+import axios from "axios";
+import * as SecureStore from "expo-secure-store"; // For secure storage
+import { getSquad } from "../../services/squadApi";
 
-const SquadList = () => {
-  const router = useRouter();
-  const [squad, setSquad] = useState([]);
-  const [pendingRequests, setPendingRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [me, setMe] = useState<string | null>(null);
+const SquadScreen = () => {
+  const [friendEmail, setFriendEmail] = useState(''); // For inputting friend ID
+  const [squad, setSquad] = useState([]);      // List of current squad members
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');  // To show success/error messages
+  const [userId, setUserId] = useState<string | null>(null); // User ID from SecureStore
 
   // Fetch user ID from SecureStore on component mount
   useEffect(() => {
     const fetchUserId = async () => {
-      const userId = await SecureStore.getItemAsync("user_id");
-      setMe(userId); // Save the user ID in state
+      const storedUserId = await SecureStore.getItemAsync("user_id");
+      setUserId(storedUserId); // Save the user ID in state
+      fetchSquad(storedUserId);
     };
 
     fetchUserId();
   }, []);
 
-  // Fetch squad and pending requests
+  // Fetch squad data
   useEffect(() => {
-    const fetchSquadData = async () => {
-      try {
-        setLoading(true);
-        const [squadData, pendingData] = await Promise.all([getSquad(me), getPendingRequests(me)]);
-        setSquad(squadData);
-        setPendingRequests(pendingData);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (me) {
-      fetchSquadData();
-    }
-  }, [me]);
-
-  // Handle accept/reject friend request
-  const handleRequestResponse = async (requestId: string, action: "accepted" | "rejected") => {
+  const fetchSquad = async (userId: string | null) => {
     try {
-      await respondToRequest(requestId, action);
-      setPendingRequests(pendingRequests.filter(req => req._id !== requestId)); // Remove the processed request
-      if (action === "accepted") {
-        fetchSquad(); // Refresh squad if a request was accepted
-      }
+      const squadData = await getSquad(userId);
+      setSquad(squadData); // Assuming API returns squad list in response.data.squad
     } catch (error) {
-      console.error("Error processing request", error);
+      console.error("Error fetching squad:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  if (userId) {
+    fetchSquad();
+  }
+  }, [userId]);
+
+  // Handle sending a friend request
+  const handleSendRequest = async () => {
+    if (!friendEmail) {
+      setMessage("Please enter a friend's email.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const token = await SecureStore.getItemAsync("token");
+      await axios.post(
+        `/squad/send-request`,
+        { userId, friendEmail }, // Send friend request
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setMessage("Friend request sent successfully!");
+    } catch (error) {
+      console.error("Error sending friend request:", error);
+      setMessage("Failed to send friend request.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Your Squad</Text>
-      <FlashList
+      <Text style={styles.title}>My Squad</Text>
+      {loading ? <Text>Loading...</Text> : null}
+      <FlatList
         data={squad}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text>{item.name}</Text>
+          <View style={styles.squadItem}>
+            <Text>{item.username}</Text>
+            <Text>{item.email}</Text>
           </View>
         )}
-        estimatedItemSize={43}
       />
 
-      <Text style={styles.title}>Pending Friend Requests</Text>
-      <FlashList
-        data={pendingRequests}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text>{item.requester.name} wants to be friends!</Text>
-            <Button title="Accept" onPress={() => handleRequestResponse(item._id, "accepted")} />
-            <Button title="Reject" onPress={() => handleRequestResponse(item._id, "rejected")} />
-          </View>
-        )}
-        estimatedItemSize={43}
+      <Text style={styles.title}>Send a Friend Request</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Friend ID"
+        value={friendEmail}
+        onChangeText={setFriendEmail}
       />
+      <Button title="Send Request" onPress={handleSendRequest} />
+      {message ? <Text>{message}</Text> : null}
     </View>
   );
 };
@@ -102,16 +98,24 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  item: {
-    padding: 16,
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1,
-  },
   title: {
     fontSize: 18,
     fontWeight: "bold",
+    marginBottom: 10,
+  },
+  input: {
+    borderColor: "#ccc",
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 4,
+  },
+  squadItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
   },
 });
 
-export default SquadList;
+export default SquadScreen;
 
