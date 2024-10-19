@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/User";
+import User, { IUser } from "../models/User";
 
 interface JwtPayloadWithId extends jwt.JwtPayload {
   userId: string;
@@ -15,19 +15,21 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string,
-    ) as JwtPayloadWithId;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayloadWithId;
 
-    const user = await User.findById(decoded.userId); // Use userId instead of _id
+    const user: IUser | null = await User.findById(decoded.userId);
 
     if (!user) {
-      return res
-        .status(401)
-        .json({ msg: "User not found, authorization denied" });
+      return res.status(401).json({ msg: "User not found, authorization denied" });
     }
-    req.user = { _id: user._id, email: user.email };
+
+    // You can attach the full IUser object or a subset (e.g., just _id and email)
+    req.user = {
+      _id: user._id,
+      email: user.email,
+      username: user.username,
+      squad: user.squad, // Add this if you need access to the squad array
+    };
 
     next();
   } catch (err) {
@@ -35,3 +37,4 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     res.status(401).json({ msg: "Token is not valid" });
   }
 };
+
