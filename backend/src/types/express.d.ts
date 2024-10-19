@@ -5,7 +5,12 @@ import { IUser } from "../../models/User";
 declare global {
   namespace Express {
     interface Request {
-      user?: IUser; // Make sure req.user is typed as IUser
+      user?: {
+        _id: string;
+        email: string;
+        username?: string;
+        squad?: mongoose.Schema.Types.ObjectId[];
+      }; // Make sure req.user is typed as IUser
     }
   }
 }
