@@ -25,7 +25,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
     // You can attach the full IUser object or a subset (e.g., just _id and email)
     req.user = {
-      _id: user._id,
+      _id: user._id.toString(),
       email: user.email,
       username: user.username,
       squad: user.squad, // Add this if you need access to the squad array
