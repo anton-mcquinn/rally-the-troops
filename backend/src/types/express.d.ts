@@ -1,17 +1,16 @@
-import { JwtPayload } from "jsonwebtoken";
-import { Request } from "express";
 import { IUser } from "../../models/User";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: IUser; // Make sure req.user is typed as IUser
-    }
+declare namespace Express {
+  export interface User {
+    _id: string;
+    username: string;
+    email: string;
+    squad: IUser["squad"];
   }
 }
 
 declare module "express-serve-static-core" {
   interface Request {
-    user?: string | JwtPayload; // Adjust based on the type of decoded token
+    user?: Express.User; // Attach the custom User type to Request
   }
 }

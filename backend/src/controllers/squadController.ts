@@ -102,16 +102,28 @@ export const getPendingFriendRequests = async (req: Request, res: Response) => {
 // Get user's squad
 export const getSquad = async (req: Request, res: Response) => {
   try {
-    const userId = req.body;
-    const user = await User.findById(userId).populate("squad", "name email");
+    // Check if req.user is undefined
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ msg: "User not authenticated" });
+    }
+
+    // Extract the user's ID from req.user
+    const userId = req.user._id;
+
+    // Find the user and populate their squad
+    const user = await User.findById(userId).populate(
+      "squad",
+      "username email",
+    );
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
 
+    // Return the squad
     res.status(200).json({ squad: user.squad });
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching squad:", err);
     res.status(500).json({ msg: "Server error" });
   }
 };
