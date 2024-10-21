@@ -10,8 +10,11 @@ export const sendFriendRequest = async (req: Request, res: Response) => {
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
 
-    if (!user || !friend) {
+    if (!user) {
       return res.status(404).json({ msg: "User not found" });
+    }
+    if (!friend) {
+      return res.status(404).json({ msg: "Friend not found" });
     }
 
     // Check if a friend request already exists
