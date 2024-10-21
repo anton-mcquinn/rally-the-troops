@@ -17,11 +17,11 @@ export const sendFriendRequest = async (req: Request, res: Response) => {
     const { id: friendId } = req.params;
 
     // Validate if both userId and friendId are valid MongoDB ObjectIds
-    if (
-      !mongoose.Types.ObjectId.isValid(userId) ||
-      !mongoose.Types.ObjectId.isValid(friendId)
-    ) {
-      return res.status(400).json({ msg: "Invalid user or friend ID" });
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ msg: "Invalid user ID" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(friendId)) {
+      return res.status(400).json({ msg: "Invalid friend ID" });
     }
 
     // Find the authenticated user and the friend by their ObjectIds
