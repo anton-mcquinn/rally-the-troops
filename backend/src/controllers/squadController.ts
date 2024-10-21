@@ -62,10 +62,11 @@ export const sendFriendRequest = async (req: Request, res: Response) => {
 
 export const respondToFriendRequest = async (req: Request, res: Response) => {
   const { requestId, status } = req.body;
-
+  /*
   if (!["accepted", "rejected"].includes(status)) {
     return res.status(400).json({ msg: "Invalid status" });
   }
+  */
 
   try {
     const request = await FriendRequest.findById(requestId);
