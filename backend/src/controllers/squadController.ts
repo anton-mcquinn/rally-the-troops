@@ -3,7 +3,8 @@ import User from "../models/User";
 import FriendRequest from "../models/FriendRequest";
 
 export const sendFriendRequest = async (req: Request, res: Response) => {
-  const { userId, friendId } = req.body;
+  const { userId } = req.body;
+  const { id: friendId } = req.params;
 
   try {
     // Check if both users exist
