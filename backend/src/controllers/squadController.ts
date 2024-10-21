@@ -105,9 +105,12 @@ export const respondToFriendRequest = async (req: Request, res: Response) => {
 };
 
 export const getPendingFriendRequests = async (req: Request, res: Response) => {
-  const { userId } = req.body;
-
   try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ msg: "User not authenticated" });
+    }
+    const userId = req.user._id;
+
     const pendingRequests = await FriendRequest.find({
       recipient: userId,
       status: "pending",

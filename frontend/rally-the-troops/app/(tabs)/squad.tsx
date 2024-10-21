@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store"; // For secure storage
 import { getSquad } from "../../services/squadApi";
 
 const SquadScreen = () => {
-  const [friendEmail, setFriendEmail] = useState(''); // For inputting friend ID
-  const [squad, setSquad] = useState([]);      // List of current squad members
+  const [friendEmail, setFriendEmail] = useState(""); // For inputting friend ID
+  const [squad, setSquad] = useState([]); // List of current squad members
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');  // To show success/error messages
+  const [message, setMessage] = useState(""); // To show success/error messages
   const [userId, setUserId] = useState<string | null>(null); // User ID from SecureStore
 
   // Fetch user ID from SecureStore on component mount
@@ -16,27 +23,25 @@ const SquadScreen = () => {
     const fetchUserId = async () => {
       const storedUserId = await SecureStore.getItemAsync("user_id");
       setUserId(storedUserId); // Save the user ID in state
-      fetchSquad(storedUserId);
     };
-
     fetchUserId();
   }, []);
 
   // Fetch squad data
   useEffect(() => {
-  const fetchSquad = async (userId: string | null) => {
-    try {
-      const squadData = await getSquad(userId);
-      setSquad(squadData); // Assuming API returns squad list in response.data.squad
-    } catch (error) {
-      console.error("Error fetching squad:", error);
-    } finally {
-      setLoading(false);
+    const fetchSquad = async (userId: string | null) => {
+      try {
+        const squadData = await getSquad(userId);
+        setSquad(squadData); // Assuming API returns squad list in response.data.squad
+      } catch (error) {
+        console.error("Error fetching squad:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (userId) {
+      fetchSquad(userId);
     }
-  };
-  if (userId) {
-    fetchSquad();
-  }
   }, [userId]);
 
   // Handle sending a friend request
@@ -54,7 +59,7 @@ const SquadScreen = () => {
         { userId, friendEmail }, // Send friend request
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
       setMessage("Friend request sent successfully!");
     } catch (error) {
@@ -118,4 +123,3 @@ const styles = StyleSheet.create({
 });
 
 export default SquadScreen;
-
