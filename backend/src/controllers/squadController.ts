@@ -1,13 +1,30 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import FriendRequest from "../models/FriendRequest";
+import mongoose from "mongoose";
 
 export const sendFriendRequest = async (req: Request, res: Response) => {
-  const { userId } = req.body;
-  const { id: friendId } = req.params;
-
   try {
-    // Check if both users exist
+    // Check if the user is authenticated and req.user exists
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ msg: "User not authenticated" });
+    }
+
+    // Extract the authenticated user's ID
+    const userId = req.user._id;
+
+    // Extract friendId from the URL params
+    const { id: friendId } = req.params;
+
+    // Validate if both userId and friendId are valid MongoDB ObjectIds
+    if (
+      !mongoose.Types.ObjectId.isValid(userId) ||
+      !mongoose.Types.ObjectId.isValid(friendId)
+    ) {
+      return res.status(400).json({ msg: "Invalid user or friend ID" });
+    }
+
+    // Find the authenticated user and the friend by their ObjectIds
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
 
