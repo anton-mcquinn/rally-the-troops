@@ -1,7 +1,7 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 export const getSquad = async (userId: string | null) => {
-  const response = await axios.get(`/squad?userId=${userId}`);
+  const response = await axiosInstance.get(`/squad`);
   return response.data.squad;
 };
 
