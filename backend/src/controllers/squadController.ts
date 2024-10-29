@@ -152,3 +152,19 @@ export const getSquad = async (req: Request, res: Response) => {
     res.status(500).json({ msg: "Server error" });
   }
 };
+
+export const searchUsers = async (req: Request, res: Response) => {
+  try {
+    const { searchTerm } = req.query;
+    if (typeof searchTerm !== "string") {
+      return res.status(400).json({ msg: "Invalid search term" });
+    }
+    const users = await User.find({
+      email: { $regex: searchTerm, $options: "i" },
+    });
+    res.status(200).json({ results: users });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+};

@@ -2,11 +2,21 @@ import express from "express";
 import cors from "cors";
 import { registerUser, loginUser } from "./controllers/authController";
 import { refreshToken } from "./controllers/refreshController";
-import { createEvent, getEvents, getEventById } from "./controllers/eventController";
+import {
+  createEvent,
+  getEvents,
+  getEventById,
+} from "./controllers/eventController";
 import { auth } from "./middleware/auth";
 import { rsvpEvent } from "./controllers/rsvpController";
 import { loginLimiter } from "./middleware/rateLimiter";
-import { sendFriendRequest, respondToFriendRequest, getPendingFriendRequests, getSquad } from "./controllers/squadController";
+import {
+  sendFriendRequest,
+  respondToFriendRequest,
+  getPendingFriendRequests,
+  getSquad,
+  searchUsers,
+} from "./controllers/squadController";
 
 const app = express();
 
@@ -36,5 +46,6 @@ app.post("/squad/respond-request", auth, respondToFriendRequest);
 app.post("/squad/:id", auth, sendFriendRequest);
 app.get("/squad/pending-requests", auth, getPendingFriendRequests);
 app.get("/squad", auth, getSquad);
+app.get("/squad/search", auth, searchUsers);
 
 export default app;

@@ -6,11 +6,22 @@ export const getSquad = async (userId: string | null) => {
 };
 
 export const getPendingRequests = async (userId: string | null) => {
-  const response = await axios.get(`/squad/pending-requests?userId=${userId}`);
+  const response = await axiosInstance.get(
+    `/squad/pending-requests?userId=${userId}`,
+  );
   return response.data.pendingRequests;
 };
 
 export const respondToRequest = async (requestId: string, action: string) => {
-  await axios.post(`/squad/respond-request`, { requestId, status: action });
+  await axiosInstance.post(`/squad/respond-request`, {
+    requestId,
+    status: action,
+  });
 };
 
+export const friendSearch = async (searchTerm: string) => {
+  const response = await axiosInstance.get(
+    `/squad/search?searchTerm=${searchTerm}`,
+  );
+  return response.data.results;
+};

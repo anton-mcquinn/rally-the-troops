@@ -17,6 +17,7 @@ const SquadScreen = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(""); // To show success/error messages
   const [userId, setUserId] = useState<string | null>(null); // User ID from SecureStore
+  const [friendSearch, setFriendSearch] = useState(""); // For searching friends
 
   // Fetch user ID from SecureStore on component mount
   useEffect(() => {
@@ -85,7 +86,7 @@ const SquadScreen = () => {
         )}
       />
 
-      <Text style={styles.title}>Send a Friend Request</Text>
+      <Text style={styles.title}>Find a Friend</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter Friend ID"
